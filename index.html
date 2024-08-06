@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Currency Converter</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+        margin: 0;
+      }
+      .converter {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      input,
+      select,
+      button {
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      button {
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="converter">
+      <h1>Currency Converter</h1>
+      <input type="number" id="amountMoney" placeholder="Enter amount" />
+      <select id="fromCurrency">
+        <option value="india">Rupees (India)</option>
+        <option value="USA">Dollar (USA)</option>
+        <option value="UK">Pound (UK)</option>
+        <option value="japan">Yen (Japan)</option>
+      </select>
+      <select id="toCurrency">
+        <option value="india">Rupees (India)</option>
+        <option value="USA">Dollar (USA)</option>
+        <option value="UK">Pound (UK)</option>
+        <option value="japan">Yen (Japan)</option>
+      </select>
+      <button id="convert">Convert</button>
+      <h2 id="result"></h2>
+    </div>
+    <script>
+      const exchangeRate = {
+        india: { USA: 0.012, UK: 0.009, japan: 0.016 },
+        USA: { india: 83.33, UK: 0.76, japan: 133.33 },
+        UK: { india: 111.11, USA: 1.32, japan: 175.44 },
+        japan: { india: 62.5, USA: 0.0075, UK: 0.0057 },
+      };
+
+      const changeButton = document.querySelector('#convert');
+      changeButton.addEventListener('click', getTheData);
+
+      function getTheData() {
+        const amountOfMoney = parseFloat(
+          document.querySelector('#amountMoney').value
+        );
+        console.log(amountOfMoney);
+
+        const fromCurrencyExchange =
+          document.querySelector('#fromCurrency').value;
+        console.log(fromCurrencyExchange);
+
+        const toCurrencyExchange = document.querySelector('#toCurrency').value;
+        console.log(toCurrencyExchange);
+
+        if (isNaN(amountOfMoney) || amountOfMoney <= 0) {
+          document.querySelector('#result').innerHTML = 'Not a valid number';
+          return;
+        }
+
+        let exchangeAmount;
+
+        if (fromCurrencyExchange === toCurrencyExchange) {
+          exchangeAmount = amountOfMoney;
+        } else {
+          exchangeAmount =
+            amountOfMoney *
+            (exchangeRate[fromCurrencyExchange][toCurrencyExchange] || 0);
+        }
+
+        let outputEle = document.querySelector('#result');
+        outputEle.innerHTML = `Given Amount ${amountOfMoney} converts to ${exchangeAmount.toFixed(
+          2
+        )} of ${toCurrencyExchange}`;
+      }
+    </script>
+  </body>
+</html>
